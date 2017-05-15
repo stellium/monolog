@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prestart": "npm run clean",
     "start": "tsc --watch",
     "build": "npm run compile",
     "clean": "npm run rimraf -- dist",
@@ -23,6 +24,7 @@
     "typescript": "^2.3.2"
   },
   "dependencies": {
+    "@stellium/common": "github:stellium/common",
     "amqplib": "^0.5.1",
     "colors": "^1.1.2",
     "containerized": "^1.0.2",

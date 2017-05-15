@@ -1,5 +1,8 @@
 import {Monolog} from './monolog'
+import {DefineCurrentModule} from '@stellium/common'
 
+
+DefineCurrentModule('test')
 
 const monologClient = Monolog.createClient()
 

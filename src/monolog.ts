@@ -1,53 +1,8 @@
-import 'colors'
-import * as containerized from 'containerized'
 import {sendPushNotification} from './send_push_notifications'
-import {MonologSchema} from './interface'
 import {Channel} from 'amqplib/callback_api'
+import {DockerServiceAddress} from '@stellium/common'
 
 const amqlib = require('amqplib/callback_api')
-
-
-const getErrorColor = (config: MonologSchema): string => {
-
-    let severity = config.severity || 'severe'
-
-    let color = 'red'
-
-    switch (severity) {
-
-        case 'moderate':
-            color = 'yellow'
-            break
-        case 'light':
-            color = 'green'
-            break
-        case 'ignore':
-            color = 'blue'
-            break
-    }
-
-    return color
-}
-
-
-let strLimit = 80
-
-const fillRemainingSpace = (length) => {
-
-    let spaces = ''
-
-    for (let i = 0; i < strLimit - length; i++) spaces += ' '
-
-    return spaces
-}
-
-
-const truncateMessage = (message: string): string => {
-
-    if (message.length <= strLimit) return `| ${message}${fillRemainingSpace(message.length)} |`
-
-    else return `| ${message} |`
-}
 
 
 /**
@@ -61,41 +16,41 @@ const truncateMessage = (message: string): string => {
  * }
  */
 /*
-export const MonologX = (config: MonologSchema, callback?: Function) => {
+ export const MonologX = (config: MonologSchema, callback?: Function) => {
 
-    return {
+ return {
 
-        createClient: () => {
+ createClient: () => {
 
-            amqlib.connect(`amqp://${containerized() ? 'rabbit' : 'localhost'}`, (err, conn) => {
+ amqlib.connect(`amqp://${containerized() ? 'rabbit' : 'localhost'}`, (err, conn) => {
 
-            })
-        }
-    }
+ })
+ }
+ }
 
-    // Set default severity value
-    config.severity = config.severity || 'severe'
+ // Set default severity value
+ config.severity = config.severity || 'severe'
 
-    // Save to database in production
-    MonologModel.create(config, (err, monologEntry) => {
+ // Save to database in production
+ MonologModel.create(config, (err, monologEntry) => {
 
-        if (config.severity === 'severe') {
-            // Send notification to all Stellium developers on severe
-            // notification that requires immediate attention
-            sendPushNotification(config.message, monologEntry._id)
-        }
+ if (config.severity === 'severe') {
+ // Send notification to all Stellium developers on severe
+ // notification that requires immediate attention
+ sendPushNotification(config.message, monologEntry._id)
+ }
 
-        // Trigger callback if provided
-        if (callback && typeof callback === 'function') callback(err, monologEntry)
-    })
-}
-*/
+ // Trigger callback if provided
+ if (callback && typeof callback === 'function') callback(err, monologEntry)
+ })
+ }
+ */
 
 
 let rabbitChannel: Channel
 
 
-amqlib.connect(`amqp://${containerized() ? 'rabbit' : 'localhost'}`, (err, conn) => {
+amqlib.connect(`amqp://${DockerServiceAddress.RabbitMQ}`, (err, conn) => {
 
     if (err) {
         console.log('error connecting to rabbit server', err)
@@ -126,10 +81,14 @@ export class Monolog {
     log(message: any): void {
 
         if (!rabbitChannel) {
-            throw new Error('Rabbit Channel has not been initialised yet')
+
+            throw new Error('The RabbitMQ Channel has not been initialised yet')
         }
 
         if (typeof message === 'object') {
+
+            message.module = ModuleID
+
             message = JSON.stringify(message)
         }
 
