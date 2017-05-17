@@ -15,4 +15,5 @@ export interface MonologLogObject {
     error?: any;
     severity?: 'severe' | 'moderate' | 'light' | 'ignore';
     created_at?: Date;
+    debounce?: number;
 }
