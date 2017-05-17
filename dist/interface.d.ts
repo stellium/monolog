@@ -11,6 +11,7 @@ export interface MonologSchema {
 export interface MonologLogObject {
     message: string;
     code: string;
+    hostname: string;
     error?: any;
     severity?: 'severe' | 'moderate' | 'light' | 'ignore';
     created_at?: Date;

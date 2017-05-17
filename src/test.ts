@@ -12,6 +12,7 @@ setTimeout(() => {
 
     monologClient.log({
         message: 'test',
-        code: 'TEST'
+        code: 'TEST',
+        hostname: 'localhost',
     })
 }, 1000)
