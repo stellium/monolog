@@ -66,13 +66,9 @@ var Monolog = (function () {
         if (!rabbitChannel) {
             throw new Error('The RabbitMQ Channel has not been initialised yet');
         }
-        if (typeof message === 'object') {
-            message.module = ModuleID;
-            message = JSON.stringify(message);
-        }
         var q = 'monolog';
         rabbitChannel.assertQueue(q, { durable: false });
-        rabbitChannel.sendToQueue(q, Buffer.from(message));
+        rabbitChannel.sendToQueue(q, Buffer.from(JSON.stringify(message)));
     };
     return Monolog;
 }());

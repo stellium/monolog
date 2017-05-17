@@ -11,6 +11,7 @@ setTimeout(() => {
     console.log('Attempting to send message')
 
     monologClient.log({
-        message: 'test'
+        message: 'test',
+        code: 'TEST'
     })
 }, 1000)

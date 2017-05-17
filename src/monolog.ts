@@ -1,6 +1,7 @@
 import {sendPushNotification} from './send_push_notifications'
 import {Channel} from 'amqplib/callback_api'
 import {DockerServiceAddress} from '@stellium/common'
+import {MonologLogObject} from './interface'
 
 const amqlib = require('amqplib/callback_api')
 
@@ -78,24 +79,17 @@ export class Monolog {
     }
 
 
-    log(message: any): void {
+    log(message: MonologLogObject): void {
 
         if (!rabbitChannel) {
 
             throw new Error('The RabbitMQ Channel has not been initialised yet')
         }
 
-        if (typeof message === 'object') {
-
-            message.module = ModuleID
-
-            message = JSON.stringify(message)
-        }
-
         const q = 'monolog'
 
         rabbitChannel.assertQueue(q, {durable: false})
 
-        rabbitChannel.sendToQueue(q, Buffer.from(message))
+        rabbitChannel.sendToQueue(q, Buffer.from(JSON.stringify(message)))
     }
 }

@@ -7,7 +7,8 @@ var monologClient = monolog_1.Monolog.createClient();
 setTimeout(function () {
     console.log('Attempting to send message');
     monologClient.log({
-        message: 'test'
+        message: 'test',
+        code: 'TEST'
     });
 }, 1000);
 //# sourceMappingURL=test.js.map

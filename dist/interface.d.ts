@@ -8,3 +8,10 @@ export interface MonologSchema {
     status?: 'created' | 'transported' | 'read' | 'resolved';
     created_at?: Date;
 }
+export interface MonologLogObject {
+    message: string;
+    code: string;
+    error?: any;
+    severity?: 'severe' | 'moderate' | 'light' | 'ignore';
+    created_at?: Date;
+}
