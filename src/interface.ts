@@ -12,7 +12,9 @@ export interface MonologSchema {
 export interface MonologLogObject {
     message: string
     code: string
-    hostname: string
+
+    // Defaults to localhost if non-domain related
+    hostname?: string
     error?: any
     severity?: 'severe' | 'moderate' | 'light' | 'ignore'
     created_at?: Date
